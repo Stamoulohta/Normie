@@ -125,7 +125,7 @@
   #define PROUI_ITEM_JD       // Tune > Junction Deviation
 #endif
 #if ENABLED(LIN_ADVANCE)
-  #define PROUI_ITEM_ADVK     // Tune > Linear Advance
+  #define PROUI_ITEM_ADVK 1   // Tune > Linear Advance
 #endif
 #if ANY(HAS_PID_HEATING, MPC_AUTOTUNE) && DISABLED(DISABLE_TUNING_GRAPH)
   #define PROUI_TUNING_GRAPH 1

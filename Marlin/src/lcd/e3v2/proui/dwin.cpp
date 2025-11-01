@@ -2689,10 +2689,10 @@ void applyMaxAccel() { planner.set_max_acceleration(hmiValue.axis, menuData.valu
 #if ENABLED(LIN_ADVANCE)
   #define LA_FDIGITS 3
   void applyLA_K() { planner.set_advance_k(menuData.value / POW(10, LA_FDIGITS)); }
-  void setLA_K() { setFloatOnClick(0, 10, LA_FDIGITS, planner.extruder_advance_K[0], applyLA_K); }
+  void setLA_K() { setFloatOnClick(0, 10, LA_FDIGITS, planner.get_advance_K(), applyLA_K); }
   void onDrawLA_K(MenuItem* menuitem, int8_t line) { onDrawFloatMenu(menuitem, line, LA_FDIGITS, planner.get_advance_k()); }
   #if ENABLED(SMOOTH_LIN_ADVANCE)
-    void applySmoothLA() { Stepper::set_advance_tau(menuData.value / POW(10, 2)); }
+    void applySmoothLA() { stepper.set_advance_tau(menuData.value / POW(10, 2)); }
     void setSmoothLA() { setPFloatOnClick(0, 0.5, 2, applySmoothLA); }
   #endif
 #endif
@@ -3551,11 +3551,13 @@ void drawTuneMenu() {
     #if ENABLED(PROUI_ITEM_JD)
       EDIT_ITEM(ICON_JDmm, MSG_JUNCTION_DEVIATION, onDrawPFloat3Menu, setJDmm, &planner.junction_deviation_mm);
     #endif
-    #if ALL(PROUI_ITEM_ADVK, LIN_ADVANCE)
-      static float editable_k = planner.get_advance_k();
+    #if PROUI_ITEM_ADVK
+      static float editable_k;
+      editable_k = planner.get_advance_k();
       EDIT_ITEM(ICON_MaxAccelerated, MSG_ADVANCE_K, onDrawLA_K, setLA_K, &editable_k);
       #if ENABLED(SMOOTH_LIN_ADVANCE)
-        static float editable_u = Stepper::get_advance_tau();
+        static float editable_u;
+        editable_u = stepper.get_advance_tau();
         EDIT_ITEM(ICON_MaxSpeed, MSG_ADVANCE_TAU, onDrawPFloat2Menu, setSmoothLA, &editable_u);
       #endif
     #endif
@@ -3695,10 +3697,12 @@ void drawMotionMenu() {
       MENU_ITEM(ICON_Homing, MSG_HOMING_FEEDRATE, onDrawSubMenu, drawHomingFRMenu);
     #endif
     #if ENABLED(LIN_ADVANCE)
-      static float editable_k = planner.get_advance_k();
+      static float editable_k;
+      editable_k = planner.get_advance_k();
       EDIT_ITEM(ICON_MaxAccelerated, MSG_ADVANCE_K, onDrawLA_K, setLA_K, &editable_k);
       #if ENABLED(SMOOTH_LIN_ADVANCE)
-        static float editable_u = Stepper::get_advance_tau();
+        static float editable_u;
+        editable_u = stepper.get_advance_tau();
         EDIT_ITEM(ICON_MaxSpeed, MSG_ADVANCE_TAU, onDrawPFloat2Menu, setSmoothLA, &editable_u);
       #endif
     #endif
