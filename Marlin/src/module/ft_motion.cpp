@@ -32,9 +32,9 @@
 #if ENABLED(FT_MOTION)
 
 #include "ft_motion.h"
-#include "ft_motion/trapezoidal_trajectory_generator.h"
-#include "ft_motion/poly5_trajectory_generator.h"
-#include "ft_motion/poly6_trajectory_generator.h"
+#include "ft_motion/trajectory_trapezoidal.h"
+#include "ft_motion/trajectory_poly5.h"
+#include "ft_motion/trajectory_poly6.h"
 #include "stepper.h" // Access stepper block queue function and abort status.
 #include "endstops.h"
 
