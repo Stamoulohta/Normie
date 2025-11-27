@@ -2041,33 +2041,15 @@ void Stepper::pulse_phase_isr() {
       const uint32_t advance_divisor_cached = advance_divisor;
 
       // Determine if pulses are needed
-      #if HAS_X_STEP
-        PULSE_PREP(X);
-      #endif
-      #if HAS_Y_STEP
-        PULSE_PREP(Y);
-      #endif
-      #if HAS_Z_STEP
-        PULSE_PREP(Z);
-      #endif
-      #if HAS_I_STEP
-        PULSE_PREP(I);
-      #endif
-      #if HAS_J_STEP
-        PULSE_PREP(J);
-      #endif
-      #if HAS_K_STEP
-        PULSE_PREP(K);
-      #endif
-      #if HAS_U_STEP
-        PULSE_PREP(U);
-      #endif
-      #if HAS_V_STEP
-        PULSE_PREP(V);
-      #endif
-      #if HAS_W_STEP
-        PULSE_PREP(W);
-      #endif
+      TERF(HAS_X_STEP, PULSE_PREP)(X);
+      TERF(HAS_Y_STEP, PULSE_PREP)(Y);
+      TERF(HAS_Z_STEP, PULSE_PREP)(Z);
+      TERF(HAS_I_STEP, PULSE_PREP)(I);
+      TERF(HAS_J_STEP, PULSE_PREP)(J);
+      TERF(HAS_K_STEP, PULSE_PREP)(K);
+      TERF(HAS_U_STEP, PULSE_PREP)(U);
+      TERF(HAS_V_STEP, PULSE_PREP)(V);
+      TERF(HAS_W_STEP, PULSE_PREP)(W);
 
       #if ANY(HAS_E0_STEP, MIXING_EXTRUDER)
         PULSE_PREP(E);
@@ -2117,33 +2099,15 @@ void Stepper::pulse_phase_isr() {
     #endif
 
     // Pulse start
-    #if HAS_X_STEP
-      PULSE_START(X);
-    #endif
-    #if HAS_Y_STEP
-      PULSE_START(Y);
-    #endif
-    #if HAS_Z_STEP
-      PULSE_START(Z);
-    #endif
-    #if HAS_I_STEP
-      PULSE_START(I);
-    #endif
-    #if HAS_J_STEP
-      PULSE_START(J);
-    #endif
-    #if HAS_K_STEP
-      PULSE_START(K);
-    #endif
-    #if HAS_U_STEP
-      PULSE_START(U);
-    #endif
-    #if HAS_V_STEP
-      PULSE_START(V);
-    #endif
-    #if HAS_W_STEP
-      PULSE_START(W);
-    #endif
+    TERF(HAS_X_STEP, PULSE_START)(X);
+    TERF(HAS_Y_STEP, PULSE_START)(Y);
+    TERF(HAS_Z_STEP, PULSE_START)(Z);
+    TERF(HAS_I_STEP, PULSE_START)(I);
+    TERF(HAS_J_STEP, PULSE_START)(J);
+    TERF(HAS_K_STEP, PULSE_START)(K);
+    TERF(HAS_U_STEP, PULSE_START)(U);
+    TERF(HAS_V_STEP, PULSE_START)(V);
+    TERF(HAS_W_STEP, PULSE_START)(W);
 
     #if ENABLED(MIXING_EXTRUDER)
       if (step_needed.e) {
@@ -2163,33 +2127,15 @@ void Stepper::pulse_phase_isr() {
     #endif
 
     // Pulse stop
-    #if HAS_X_STEP
-      PULSE_STOP(X);
-    #endif
-    #if HAS_Y_STEP
-      PULSE_STOP(Y);
-    #endif
-    #if HAS_Z_STEP
-      PULSE_STOP(Z);
-    #endif
-    #if HAS_I_STEP
-      PULSE_STOP(I);
-    #endif
-    #if HAS_J_STEP
-      PULSE_STOP(J);
-    #endif
-    #if HAS_K_STEP
-      PULSE_STOP(K);
-    #endif
-    #if HAS_U_STEP
-      PULSE_STOP(U);
-    #endif
-    #if HAS_V_STEP
-      PULSE_STOP(V);
-    #endif
-    #if HAS_W_STEP
-      PULSE_STOP(W);
-    #endif
+    TERF(HAS_X_STEP, PULSE_STOP)(X);
+    TERF(HAS_Y_STEP, PULSE_STOP)(Y);
+    TERF(HAS_Z_STEP, PULSE_STOP)(Z);
+    TERF(HAS_I_STEP, PULSE_STOP)(I);
+    TERF(HAS_J_STEP, PULSE_STOP)(J);
+    TERF(HAS_K_STEP, PULSE_STOP)(K);
+    TERF(HAS_U_STEP, PULSE_STOP)(U);
+    TERF(HAS_V_STEP, PULSE_STOP)(V);
+    TERF(HAS_W_STEP, PULSE_STOP)(W);
 
     #if ENABLED(MIXING_EXTRUDER)
       if (step_needed.e) E_STEP_WRITE(mixer.get_stepper(), !STEP_STATE_E);
