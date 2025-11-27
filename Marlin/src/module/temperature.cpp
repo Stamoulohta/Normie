@@ -4143,9 +4143,9 @@ void Temperature::isr() {
         REPEAT(HOTENDS, _PWM_LOW_E);
       #endif
 
-      TERF(HAS_HEATED_BED, _PWM_LOW)(BED, soft_pwm_bed);
+      TERF(HAS_HEATED_BED,     _PWM_LOW)(BED, soft_pwm_bed);
       TERF(HAS_HEATED_CHAMBER, _PWM_LOW)(CHAMBER, soft_pwm_chamber);
-      TERF(HAS_COOLER, _PWM_LOW)(COOLER, soft_pwm_cooler);
+      TERF(HAS_COOLER,         _PWM_LOW)(COOLER, soft_pwm_cooler);
 
       #if ENABLED(FAN_SOFT_PWM)
         #if HAS_FAN0
@@ -4208,9 +4208,9 @@ void Temperature::isr() {
         REPEAT(HOTENDS, _SLOW_PWM_E);
       #endif
 
-      TERF(HAS_HEATED_BED, _SLOW_PWM)(BED, soft_pwm_bed, temp_bed);
+      TERF(HAS_HEATED_BED,     _SLOW_PWM)(BED, soft_pwm_bed, temp_bed);
       TERF(HAS_HEATED_CHAMBER, _SLOW_PWM)(CHAMBER, soft_pwm_chamber, temp_chamber);
-      TERF(HAS_COOLER, _SLOW_PWM)(COOLER, soft_pwm_cooler, temp_cooler);
+      TERF(HAS_COOLER,         _SLOW_PWM)(COOLER, soft_pwm_cooler, temp_cooler);
 
     } // slow_pwm_count == 0
 
@@ -4219,9 +4219,9 @@ void Temperature::isr() {
       REPEAT(HOTENDS, _PWM_OFF_E);
     #endif
 
-    TERF(HAS_HEATED_BED, _PWM_OFF)(BED, soft_pwm_bed);
+    TERF(HAS_HEATED_BED,     _PWM_OFF)(BED, soft_pwm_bed);
     TERF(HAS_HEATED_CHAMBER, _PWM_OFF)(CHAMBER, soft_pwm_chamber);
-    TERF(HAS_COOLER, _PWM_OFF)(COOLER, soft_pwm_cooler, temp_cooler);
+    TERF(HAS_COOLER,         _PWM_OFF)(COOLER, soft_pwm_cooler, temp_cooler);
 
     #if ENABLED(FAN_SOFT_PWM)
       if (pwm_count_tmp >= 127) {
