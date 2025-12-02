@@ -74,11 +74,11 @@ float FTMotion::tau = 0.0f;                         // (s) Time since start of b
 // Trajectory generators
 TrapezoidalTrajectoryGenerator FTMotion::trapezoidalGenerator;
 #if ENABLED(FTM_POLYS)
+  TrajectoryType FTMotion::trajectoryType = TrajectoryType::FTM_TRAJECTORY_TYPE;
   Poly5TrajectoryGenerator FTMotion::poly5Generator;
   Poly6TrajectoryGenerator FTMotion::poly6Generator;
+  TrajectoryGenerator* FTMotion::currentGenerator = &FTMotion::trapezoidalGenerator;
 #endif
-TrajectoryGenerator* FTMotion::currentGenerator = &FTMotion::trapezoidalGenerator;
-TrajectoryType FTMotion::trajectoryType = TrajectoryType::FTM_TRAJECTORY_TYPE;
 
 // Resonance Test
 TERN_(FTM_RESONANCE_TEST,ResonanceGenerator FTMotion::rtg;) // Resonance trajectory generator instance
@@ -288,20 +288,33 @@ void FTMotion::plan_runout_block() {
 void FTMotion::init() {
   update_shaping_params();
   TERN_(FTM_SMOOTHING, update_smoothing_params());
-  setTrajectoryType(cfg.trajectory_type);
+  TERN_(FTM_POLYS, setTrajectoryType(cfg.trajectory_type));
   reset(); // Precautionary.
 }
 
-// Set trajectory generator type
-void FTMotion::setTrajectoryType(const TrajectoryType type) {
-  cfg.trajectory_type = trajectoryType = type;
-  switch (type) {
-    default: cfg.trajectory_type = trajectoryType = TrajectoryType::FTM_TRAJECTORY_TYPE;
-    case TrajectoryType::TRAPEZOIDAL: currentGenerator = &trapezoidalGenerator; break;
-    #if ENABLED(FTM_POLYS)
-      case TrajectoryType::POLY5: currentGenerator = &poly5Generator; break;
-      case TrajectoryType::POLY6: currentGenerator = &poly6Generator; break;
-    #endif
+#if ENABLED(FTM_POLYS)
+
+  // Set trajectory generator type
+  void FTMotion::setTrajectoryType(const TrajectoryType type) {
+    cfg.trajectory_type = trajectoryType = type;
+    switch (type) {
+      default:
+      case TrajectoryType::TRAPEZOIDAL: currentGenerator = &trapezoidalGenerator; break;
+      #if ENABLED(FTM_POLYS)
+        case TrajectoryType::POLY5: currentGenerator = &poly5Generator; break;
+        case TrajectoryType::POLY6: currentGenerator = &poly6Generator; break;
+      #endif
+    }
+  }
+
+#endif // FTM_POLYS
+
+FSTR_P FTMotion::getTrajectoryName() {
+  switch (getTrajectoryType()) {
+    default:
+    case TrajectoryType::TRAPEZOIDAL: return GET_TEXT_F(MSG_FTM_TRAPEZOIDAL);
+    case TrajectoryType::POLY5:       return GET_TEXT_F(MSG_FTM_POLY5);
+    case TrajectoryType::POLY6:       return GET_TEXT_F(MSG_FTM_POLY6);
   }
 }
 

@@ -28,18 +28,9 @@
 #include "../../../module/stepper.h"
 #include "../../../module/planner.h"
 
-static FSTR_P get_trajectory_type_name() {
-  switch (ftMotion.getTrajectoryType()) {
-    default:
-    case TrajectoryType::TRAPEZOIDAL: return GET_TEXT_F(MSG_FTM_TRAPEZOIDAL);
-    case TrajectoryType::POLY5:       return GET_TEXT_F(MSG_FTM_POLY5);
-    case TrajectoryType::POLY6:       return GET_TEXT_F(MSG_FTM_POLY6);
-  }
-}
-
 void say_ftm_settings() {
   #if ENABLED(FTM_POLYS)
-    SERIAL_ECHOLN(F("  Trajectory: "), get_trajectory_type_name(), C('('), (uint8_t)ftMotion.getTrajectoryType(), C(')'));
+    SERIAL_ECHOLN(F("  Trajectory: "), ftMotion.getTrajectoryName(), C('('), (uint8_t)ftMotion.getTrajectoryType(), C(')'));
   #endif
 
   const ft_config_t &c = ftMotion.cfg;

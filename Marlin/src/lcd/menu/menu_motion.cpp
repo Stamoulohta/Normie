@@ -327,18 +327,6 @@ void menu_move() {
     }
   }
 
-  #if ENABLED(FTM_POLYS)
-    FSTR_P get_trajectory_name() {
-      switch (ftMotion.getTrajectoryType()) {
-        default:
-        case TrajectoryType::TRAPEZOIDAL: return GET_TEXT_F(MSG_FTM_TRAPEZOIDAL);
-        case TrajectoryType::POLY5:       return GET_TEXT_F(MSG_FTM_POLY5);
-        case TrajectoryType::POLY6:       return GET_TEXT_F(MSG_FTM_POLY6);
-
-      }
-    }
-  #endif // FTM_POLYS
-
   #if HAS_DYNAMIC_FREQ
     FSTR_P get_dyn_freq_mode_name() {
       switch (ftMotion.cfg.dynFreqMode) {
@@ -494,7 +482,7 @@ void menu_move() {
       auto _traj_name = [&]{
         if (TERN1(CACHE_FOR_SPEED, !got_t)) {
           TERN_(CACHE_FOR_SPEED, got_t = true);
-          traj_name = get_trajectory_name();
+          traj_name = ftMotion.getTrajectoryName();
         }
         return traj_name;
       };
@@ -504,7 +492,7 @@ void menu_move() {
         auto _dmode = []{ return get_dyn_freq_mode_name(); };
       #endif
       #if ENABLED(FTM_POLYS)
-        auto _traj_name = []{ return get_trajectory_name(); };
+        auto _traj_name = []{ return ftMotion.getTrajectoryName(); };
       #endif
     #endif
 
@@ -598,7 +586,7 @@ void menu_move() {
         auto _traj_name = [&]{
           if (TERN1(CACHE_FOR_SPEED, !got_t)) {
             TERN_(CACHE_FOR_SPEED, got_t = true);
-            traj_name = get_trajectory_name();
+            traj_name = ftMotion.getTrajectoryName();
           }
           return traj_name;
         };
@@ -611,7 +599,7 @@ void menu_move() {
         auto _dmode = []{ return get_dyn_freq_mode_name(); };
       #endif
       #if ENABLED(FTM_POLYS)
-        auto _traj_name = []{ return get_trajectory_name(); };
+        auto _traj_name = []{ return ftMotion.getTrajectoryName(); };
       #endif
 
     #endif // !__AVR__
