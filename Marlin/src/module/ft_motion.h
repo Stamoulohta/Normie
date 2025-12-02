@@ -90,6 +90,20 @@ typedef struct FTConfig {
   #else
     static constexpr TrajectoryType trajectory_type = TrajectoryType::TRAPEZOIDAL;
   #endif
+
+  #if HAS_FTM_SHAPING
+    constexpr bool goodZeta(const float z) { return WITHIN(z, 0.01f, 1.0f); }
+    constexpr bool goodVtol(const float v) { return WITHIN(v, 0.00f, 1.0f); }
+    #if HAS_DYNAMIC_FREQ
+      bool modeUsesDynFreq() const {
+        return (TERN0(HAS_DYNAMIC_FREQ_MM, dynFreqMode == dynFreqMode_Z_BASED)
+             || TERN0(HAS_DYNAMIC_FREQ_G,  dynFreqMode == dynFreqMode_MASS_BASED));
+      }
+    #endif
+  #endif // HAS_FTM_SHAPING
+
+  constexpr bool goodBaseFreq(const float f) { return WITHIN(f, FTM_MIN_SHAPE_FREQ, (FTM_FS) / 2); }
+
 } ft_config_t;
 
 /**

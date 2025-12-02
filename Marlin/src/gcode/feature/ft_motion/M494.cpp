@@ -55,19 +55,18 @@ void GcodeSuite::M494_report(const bool forReplay/*=true*/) {
   SERIAL_ECHOPGM("  M494 T", (uint8_t)ftMotion.getTrajectoryType());
 
   #if ENABLED(FTM_SMOOTHING)
-    SERIAL_ECHOPGM(
-      CARTES_PAIRED_LIST(
-        " X", c.smoothingTime.X, " Y", c.smoothingTime.Y,
-        " Z", c.smoothingTime.Z, " E", c.smoothingTime.E
-      )
-    );
-  #endif // FTM_SMOOTHING
+    SERIAL_ECHOPGM(CARTES_PAIRED_LIST(
+      " X", c.smoothingTime.X,
+      " Y", c.smoothingTime.Y,
+      " Z", c.smoothingTime.Z,
+      " E", c.smoothingTime.E
+    ));
+  #endif
 
   #if ENABLED(FTM_POLYS)
-
     if (ftMotion.getTrajectoryType() == TrajectoryType::POLY6)
       SERIAL_ECHOPGM(" O", c.poly6_acceleration_overshoot);
-  #endif // FTM_POLYS
+  #endif
 
   SERIAL_EOL();
 }
@@ -97,8 +96,9 @@ void GcodeSuite::M494() {
         report = true;
       }
       else
-        SERIAL_ECHOLN(F("?Invalid "), F("trajectory type [T] value. Use 0=TRAPEZOIDAL, 1=POLY5, 2=POLY6"));
+        SERIAL_ECHOLN(F("?Invalid "), F("(T)rajectory type value. Use 0=TRAPEZOIDAL, 1=POLY5, 2=POLY6"));
     }
+
     // Parse overshoot parameter.
     if (parser.seenval('O')) {
       const float val = parser.value_float();
@@ -107,7 +107,7 @@ void GcodeSuite::M494() {
         report = true;
       }
       else
-        SERIAL_ECHOLN(F("?Invalid "), F("overshoot [O] value. Range 1.25-1.875"));
+        SERIAL_ECHOLN(F("?Invalid "), F("(O)vershoot value. Range 1.25-1.875"));
     }
 
   #endif // FTM_POLYS
@@ -122,7 +122,7 @@ void GcodeSuite::M494() {
           report = true; \
         } \
         else \
-          SERIAL_ECHOLNPGM("?Invalid ", C(N), " smoothing time [", C(CHARIFY(A)), "] value."); \
+          SERIAL_ECHOLNPGM("?Invalid ", C(N), " smoothing time (", C(CHARIFY(A)), ") value."); \
       }
 
     CARTES_GANG(

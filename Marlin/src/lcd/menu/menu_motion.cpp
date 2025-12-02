@@ -542,6 +542,7 @@ void menu_move() {
   } // menu_ft_motion
 
   void menu_tune_ft_motion() {
+
     // Define stuff ahead of the menu loop
     ft_config_t &c = ftMotion.cfg;
 
@@ -551,10 +552,10 @@ void menu_move() {
       // For U8G paged rendering check and skip extra string copy
 
       #if HAS_X_AXIS
-        MString<20> shaper_name;
         #if CACHE_FOR_SPEED
           int8_t prev_a = -1;
         #endif
+        MString<20> shaper_name;
         auto _shaper_name = [&](const AxisEnum a) {
           if (TERN1(CACHE_FOR_SPEED, a != prev_a)) {
             TERN_(CACHE_FOR_SPEED, prev_a = a);
@@ -565,10 +566,10 @@ void menu_move() {
       #endif
 
       #if HAS_DYNAMIC_FREQ
-        MString<20> dmode;
         #if CACHE_FOR_SPEED
           bool got_d = false;
         #endif
+        MString<20> dmode;
         auto _dmode = [&]{
           if (TERN1(CACHE_FOR_SPEED, !got_d)) {
             TERN_(CACHE_FOR_SPEED, got_d = true);
@@ -579,10 +580,10 @@ void menu_move() {
       #endif
 
       #if ENABLED(FTM_POLYS)
-        MString<20> traj_name;
         #if CACHE_FOR_SPEED
           bool got_t = false;
         #endif
+        MString<20> traj_name;
         auto _traj_name = [&]{
           if (TERN1(CACHE_FOR_SPEED, !got_t)) {
             TERN_(CACHE_FOR_SPEED, got_t = true);

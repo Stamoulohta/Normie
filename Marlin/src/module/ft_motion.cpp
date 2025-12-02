@@ -81,7 +81,9 @@ TrapezoidalTrajectoryGenerator FTMotion::trapezoidalGenerator;
 #endif
 
 // Resonance Test
-TERN_(FTM_RESONANCE_TEST,ResonanceGenerator FTMotion::rtg;) // Resonance trajectory generator instance
+#if ENABLED(FTM_RESONANCE_TEST)
+  ResonanceGenerator FTMotion::rtg; // Resonance trajectory generator instance
+#endif
 
 #if FTM_HAS_LIN_ADVANCE
   bool FTMotion::use_advance_lead;
