@@ -192,7 +192,7 @@ void FTMotion::loop() {
 
   void FTMotion::update_shaping_params() {
     #define UPDATE_SHAPER(A) \
-      shaping.A.ena = ftMotion.cfg.shaper.A != ftMotionShaper_NONE; \
+      shaping.A.ena = IS_SHAPING(ftMotion.cfg.shaper.A); \
       shaping.A.set_axis_shaping_A(cfg.shaper.A, cfg.zeta.A, cfg.vtol.A); \
       shaping.A.set_axis_shaping_N(cfg.shaper.A, cfg.baseFreq.A, cfg.zeta.A);
 
@@ -204,19 +204,19 @@ void FTMotion::loop() {
 
 #if ENABLED(FTM_SMOOTHING)
 
+  #include "planner.h"
+
   void FTMotion::update_smoothing_params() {
-    #define _SMOOTH_PARAM(A) smoothing.A.set_smoothing_time(cfg.smoothingTime.A);
+    #define _SMOOTH_PARAM(A) smoothing.A.set_time(cfg.smoothingTime.A);
     CARTES_MAP(_SMOOTH_PARAM);
     smoothing.refresh_largest_delay_samples();
   }
 
-  void FTMotion::set_smoothing_time(uint8_t axis, const float s_time) {
-    #define _SMOOTH_CASE(A) case _AXIS(A): cfg.smoothingTime.A = s_time; break;
-    switch (axis) {
-      default:
-      CARTES_MAP(_SMOOTH_CASE);
-    }
+  bool FTMotion::set_smoothing_time(const AxisEnum axis, const float s_time) {
+    if (!WITHIN(s_time, 0.0f, FTM_MAX_SMOOTHING_TIME)) return false;
+    cfg.smoothingTime[axis] = s_time;
     update_smoothing_params();
+    return true;
   }
 
 #endif // FTM_SMOOTHING
@@ -302,6 +302,21 @@ void FTMotion::init() {
       case TrajectoryType::POLY5:       currentGenerator = &poly5Generator;       break;
       case TrajectoryType::POLY6:       currentGenerator = &poly6Generator;       break;
     }
+  }
+
+  // Update trajectory generator type from G-code or UI
+  bool FTMotion::updateTrajectoryType(const TrajectoryType type) {
+    if (type == trajectoryType) return false;
+    switch (type) {
+      default: return false;
+      case TrajectoryType::TRAPEZOIDAL:
+      case TrajectoryType::POLY5:
+      case TrajectoryType::POLY6:
+        break;
+    }
+    planner.synchronize();
+    setTrajectoryType(type);
+    return true;
   }
 
 #endif // FTM_POLYS
