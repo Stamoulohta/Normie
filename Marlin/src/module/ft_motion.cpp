@@ -389,8 +389,11 @@ bool FTMotion::plan_next_block() {
       stepper.last_direction_bits.hz = current_block->direction_bits.hz;
     #endif
 
-    // Cache the extruder index for this block
-    TERN_(DISTINCT_E_FACTORS, block_extruder_axis = E_AXIS_N(current_block->extruder));
+    // Cache the extruder index / axis for this block
+    #if ENABLED(DISTINCT_E_FACTORS)
+      stepper_extruder = current_block->extruder;
+      block_extruder_axis = E_AXIS_N(current_block->extruder);
+    #endif
 
     const float totalLength = current_block->millimeters;
 
