@@ -627,7 +627,7 @@ void FTMotion::fill_stepper_plan_buffer() {
         // hold that axis' trajectory coordinate constant for at least 750µs.
 
         #define DIR_FLIP_HOLD_S 0.000'750f
-        static constexpr uint32_t dir_flip_hold_frames = DIR_FLIP_HOLD_S / (FTM_TS + 1);
+        static constexpr uint32_t dir_flip_hold_frames = 1 + (DIR_FLIP_HOLD_S) / (FTM_TS);
 
         auto start_hold_if_dir_flip = [&](const AxisEnum a) {
           const bool dir = traj_coords[a] > last_target_traj[a],
