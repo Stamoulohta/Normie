@@ -594,7 +594,7 @@ void FTMotion::fill_stepper_plan_buffer() {
     float total_duration = currentGenerator->getTotalDuration(); // If the current plan is empty, it will have zero duration.
     while (tau + FTM_TS > total_duration) {
       /**
-       * We’ve reached the end of the current block.
+       * We've reached the end of the current block.
        *
        * `tau` is the time that has elapsed inside this block. After a block is finished, the next one may
        * start at any point between *just before* the last sampled time (one step earlier, i.e. `-FTM_TS`)
@@ -603,7 +603,7 @@ void FTMotion::fill_stepper_plan_buffer() {
        *
        * To account for that uncertainty we simply subtract the duration of the finished block from `tau`.
        * This brings us back to a time value that is valid for the next block, while still allowing the next
-       * block’s start to be offset by up to one time step into the past.
+       * block's start to be offset by up to one time step into the past.
        */
       tau -= total_duration;
       const bool plan_available = plan_next_block();
