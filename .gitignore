@@ -125,6 +125,8 @@ vc-fileutils.settings
 # Visual Studio Code
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
+
 
 # Simulation files
 imgui.ini
